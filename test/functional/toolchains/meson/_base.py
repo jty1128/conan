@@ -1,4 +1,5 @@
 import platform
+import subprocess
 import unittest
 
 import pytest
@@ -33,4 +34,5 @@ class TestMesonBase(unittest.TestCase):
             self.assertIn("main _MSVC_LANG2014", self.t.out)
         elif platform.system() == "Linux":
             self.assertIn(f"main {arch_macro['gcc'][host_arch]} defined", self.t.out)
-            self.assertIn("main __GNUC__9", self.t.out)
+            gcc_major = subprocess.check_output(["gcc", "-dumpversion"], text=True).strip().split(".")[0]
+            self.assertIn(f"main __GNUC__{gcc_major}", self.t.out)
