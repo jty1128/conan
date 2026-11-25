@@ -1,9 +1,18 @@
 import platform
+import subprocess
 import unittest
 
 import pytest
 
 from conan.test.utils.tools import TestClient
+
+
+def _gcc_major_version():
+    try:
+        output = subprocess.check_output(["gcc", "-dumpversion"]).strip().decode()
+        return output.split(".")[0]
+    except Exception:
+        return None
 
 
 @pytest.mark.tool("meson")
@@ -33,4 +42,4 @@ class TestMesonBase(unittest.TestCase):
             self.assertIn("main _MSVC_LANG2014", self.t.out)
         elif platform.system() == "Linux":
             self.assertIn(f"main {arch_macro['gcc'][host_arch]} defined", self.t.out)
-            self.assertIn("main __GNUC__9", self.t.out)
+            self.assertIn(f"main __GNUC__{_gcc_major_version()}", self.t.out)
