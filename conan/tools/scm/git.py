@@ -113,9 +113,15 @@ class Git:
             raise ConanException("Unable to check remote commit in '%s': %s" % (self.folder, str(e)))
 
         try:
-            # This will raise if commit not present.
-            self.run(f"fetch {remote} --dry-run {commit}")
-            return True
+            # Fallback for shallow clones where branch -r --contains can't find the commit.
+            # Using "fetch --dry-run" is unreliable: it exits 0 whenever the commit is
+            # already present in the local object store, even if the remote does not have it.
+            # Instead, check if the commit matches any ref advertised by the remote.
+            remote_refs = self.run(f"ls-remote {remote}")
+            for line in remote_refs.splitlines():
+                if line.startswith(commit):
+                    return True
+            return False
         except (Exception,):
             # Don't raise an error because the fetch could fail for many more reasons than the branch.
             return False
