@@ -17,10 +17,10 @@ ENV PY36=3.6.15 \
     CMAKE_3_23=/usr/share/cmake-3.23.5/bin/cmake \
     CMAKE_3_27=/usr/share/cmake-3.27.9/bin/cmake \
     CMAKE_4_0=/usr/share/cmake-4.0.0-rc3/bin/cmake \
-    GCC_9=/usr/bin/gcc-9 \
-    GXX_9=/usr/bin/g++-9 \
-    GCC_11=/usr/bin/gcc-11 \
-    GXX_11=/usr/bin/g++-11 \
+    GCC_13=/usr/bin/gcc-13 \
+    GXX_13=/usr/bin/g++-13 \
+    GCC_14=/usr/bin/gcc-14 \
+    GXX_14=/usr/bin/g++-14 \
     CLANG_14=/usr/bin/clang-14 \
     CLANGXX_14=/usr/bin/clang++-14 \
     BAZEL_6=6.5.0 \
@@ -60,10 +60,8 @@ RUN apt-get update && \
         subversion \
         subversion-tools \
         ninja-build \
-        gcc-9 \
-        g++-9 \
-        gcc-11 \
-        g++-11 \
+        gcc-14 \
+        g++-14 \
         clang-14 \
         clang++-14 \
         gcc-arm-linux-gnueabihf \
@@ -71,10 +69,10 @@ RUN apt-get update && \
         unzip \
         apt-transport-https \
         gnupg-agent \
-        gcc-9-multilib \
-        g++-9-multilib \
-        gcc-11-multilib \
-        g++-11-multilib \
+        gcc-13-multilib \
+        g++-13-multilib \
+        gcc-14-multilib \
+        g++-14-multilib \
         scons && \
     # fix: asm/errno.h: No such file or directory
     ln -s /usr/include/asm-generic/ /usr/include/asm && \
@@ -133,14 +131,14 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.15.7/cmake-3.15.7
     # set CMake 3.15 as default
     update-alternatives --set cmake $CMAKE_3_15
 
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 10 && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 30 && \
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 10 && \
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 30 && \
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 10 && \
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 30 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 10 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 30 && \
     update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 10 && \
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-14 10 && \
-    update-alternatives --set gcc /usr/bin/gcc-9 && \
-    update-alternatives --set g++ /usr/bin/g++-9 && \
+    update-alternatives --set gcc /usr/bin/gcc-13 && \
+    update-alternatives --set g++ /usr/bin/g++-13 && \
     update-alternatives --set clang /usr/bin/clang-14 && \
     update-alternatives --set clang++ /usr/bin/clang++-14
 
